@@ -71,15 +71,15 @@ def boat_time(w0, Q_ls, data_x, data_y, data_name, empty_speed, speed_loss_per_t
             current_x, current_y = 0, 0
 
             if sum(Q_ls) > max_ton:
-                w = w0
+                w = max_ton
             else:
                 w = sum(Q_ls)
             route_ls.append('D0')
 
     return sum(t_ls) + 5 * sum_Q / 12, route_ls
 
-def func(x):
-    w0_A, w0_B, w0_C = x
+def func():
+    w0_A, w0_B, w0_C = 50, 50, 50
 
     dataFrame = pd.read_excel('附件1.xlsx').dropna()
     data_name = dataFrame['海岛编号'].tolist()
@@ -102,9 +102,12 @@ def func(x):
     return max(t_A, t_B, t_C)
 
 def main():
-    ga = GA(func=func, n_dim=3, size_pop=50, max_iter=10000, prob_mut=0.001, lb=[0, 0, 0], ub=[50, 50, 50], precision=1e-7)
-    best_x, best_y = ga.run()
-    print('best_x:', best_x, '\n', 'best_y:', best_y)
+    t = []
+    for _ in range(10000):
+        t.append(func())
+
+    best_y = min(t)
+    print(best_y)
     for index in data_route:
         if index[0] == best_y:
             print(index[1])

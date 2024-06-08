@@ -9,24 +9,34 @@ data_route = []  # 初始化一个航程的列表
 # 随机分配岛屿的需求量给三艘船
 def random_Q(data_Q):
     Q_ls = []    # 初始化一个需求量分配的列表
-    m, n, p = 0, 0, 0
+    m, n, p, z = 0, 0, 0, 0
     for i in range(len(data_Q)):
-        # if i == 6 or i == 7 or i == 9 or i == 10:
-        #     m = round(random.uniform(0, i), 1)
-        #     if m < i:
-        #         n = round(random.uniform(0, i - m), 1)
-        #         if n < i - m:
-        #             p = i - m - n
-        temp = random.randint(1, 3)
+        temp = random.randint(1, 4)
         if temp == 1:
             m = data_Q[i]
         elif temp == 2:
             n = data_Q[i]
-        else:
+        elif temp == 3:
             p = data_Q[i]
-        Q_ls.append([m, n, p])
-        m, n, p = 0, 0, 0
+        else:
+            z = data_Q[i]
+        Q_ls.append([m, n, p, z])
+        m, n, p, z = 0, 0, 0, 0
     return np.array(Q_ls)
+
+
+# def re_random(Q_ls, data_Q, Q_i):
+#     for i in Q_i:
+#         num = 0
+#         if i > 0:
+#            num += 1
+#         if num <= 4:
+#             Q_ls = random_Q(data_Q)
+#
+#             Q_A = list(np.concatenate(Q_ls[:, 0:1]))
+#             Q_B = list(np.concatenate(Q_ls[:, 1:2]))
+#             Q_C = list(np.concatenate(Q_ls[:, 2:3]))
+#             Q_D = list(np.concatenate(Q_ls[:, 3:4]))
 
 # 计算两点之间的距离
 def distance(x1, y1, x2, y2):
@@ -79,7 +89,7 @@ def boat_time(w0, Q_ls, data_x, data_y, data_name, empty_speed, speed_loss_per_t
     return sum(t_ls) + 5 * sum_Q / 12, route_ls
 
 def func(x):
-    w0_A, w0_B, w0_C = x
+    w0_A, w0_B, w0_C, w0_D = x
 
     dataFrame = pd.read_excel('附件1.xlsx').dropna()
     data_name = dataFrame['海岛编号'].tolist()
@@ -92,17 +102,67 @@ def func(x):
     Q_A = list(np.concatenate(Q_ls[:, 0:1]))
     Q_B = list(np.concatenate(Q_ls[:, 1:2]))
     Q_C = list(np.concatenate(Q_ls[:, 2:3]))
+    Q_D = list(np.concatenate(Q_ls[:, 3:4]))
+
+    for i in Q_A:
+        num = 0
+        if i > 0:
+           num += 1
+        if num <= 4:
+            Q_ls = random_Q(data_Q)
+
+            Q_A = list(np.concatenate(Q_ls[:, 0:1]))
+            Q_B = list(np.concatenate(Q_ls[:, 1:2]))
+            Q_C = list(np.concatenate(Q_ls[:, 2:3]))
+            Q_D = list(np.concatenate(Q_ls[:, 3:4]))
+
+    for i in Q_B:
+        num = 0
+        if i > 0:
+           num += 1
+        if num <= 4:
+            Q_ls = random_Q(data_Q)
+
+            Q_A = list(np.concatenate(Q_ls[:, 0:1]))
+            Q_B = list(np.concatenate(Q_ls[:, 1:2]))
+            Q_C = list(np.concatenate(Q_ls[:, 2:3]))
+            Q_D = list(np.concatenate(Q_ls[:, 3:4]))
+
+    for i in Q_C:
+        num = 0
+        if i > 0:
+           num += 1
+        if num <= 4:
+            Q_ls = random_Q(data_Q)
+
+            Q_A = list(np.concatenate(Q_ls[:, 0:1]))
+            Q_B = list(np.concatenate(Q_ls[:, 1:2]))
+            Q_C = list(np.concatenate(Q_ls[:, 2:3]))
+            Q_D = list(np.concatenate(Q_ls[:, 3:4]))
+
+    for i in Q_D:
+        num = 0
+        if i > 0:
+           num += 1
+        if num <= 4:
+            Q_ls = random_Q(data_Q)
+
+            Q_A = list(np.concatenate(Q_ls[:, 0:1]))
+            Q_B = list(np.concatenate(Q_ls[:, 1:2]))
+            Q_C = list(np.concatenate(Q_ls[:, 2:3]))
+            Q_D = list(np.concatenate(Q_ls[:, 3:4]))
 
     t_A, route_A = boat_time(w0_A, Q_A, data_x, data_y, data_name, 26, 0.12, 50)
     t_B, route_B = boat_time(w0_B, Q_B, data_x, data_y, data_name, 26, 0.12, 50)
     t_C, route_C = boat_time(w0_C, Q_C, data_x, data_y, data_name, 26, 0.12, 50)
+    t_D, route_D = boat_time(w0_D, Q_D, data_x, data_y, data_name, 30, 0.1, 80)
 
-    data_route.append([max(t_A, t_B, t_C), f'A:{route_A}, B:{route_B}, C:{route_C}'])
+    data_route.append([max(t_A, t_B, t_C, t_D), f'A:{route_A}, B:{route_B}, C:{route_C}, D:{route_D}'])
 
-    return max(t_A, t_B, t_C)
+    return max(t_A, t_B, t_C, t_D)
 
 def main():
-    ga = GA(func=func, n_dim=3, size_pop=100, max_iter=100, prob_mut=0.01, lb=[30, 30, 30], ub=[50, 50, 50], precision=1e-10)
+    ga = GA(func=func, n_dim=4, size_pop=100, max_iter=1000, prob_mut=0.1, lb=[40, 40, 40, 70], ub=[50, 50, 50, 80], precision=1e-10)
     best_x, best_y = ga.run()
     print('best_x:', best_x, '\n', 'best_y:', best_y)
     for index in data_route:
