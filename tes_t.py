@@ -11,20 +11,19 @@ def random_Q(data_Q):
     Q_ls = []    # 初始化一个需求量分配的列表
     m, n, p = 0, 0, 0
     for i in range(len(data_Q)):
-        if i == 6 or i == 7 or i == 9 or i == 10:
-            m = round(random.uniform(0, i), 1)
-            if m < i:
-                n = round(random.uniform(0, i - m), 1)
-                if n < i - m:
-                    p = i - m - n
+        # if i == 6 or i == 7 or i == 9 or i == 10:
+        #     m = round(random.uniform(0, i), 1)
+        #     if m < i:
+        #         n = round(random.uniform(0, i - m), 1)
+        #         if n < i - m:
+        #             p = i - m - n
+        temp = random.randint(1, 3)
+        if temp == 1:
+            m = data_Q[i]
+        elif temp == 2:
+            n = data_Q[i]
         else:
-            temp = random.randint(1, 4)
-            if temp == 1:
-                m = data_Q[i]
-            elif temp == 2:
-                n = data_Q[i]
-            else:
-                p = data_Q[i]
+            p = data_Q[i]
         Q_ls.append([m, n, p])
         m, n, p = 0, 0, 0
     return np.array(Q_ls)
@@ -103,7 +102,7 @@ def func(x):
     return max(t_A, t_B, t_C)
 
 def main():
-    ga = GA(func=func, n_dim=3, size_pop=50, max_iter=1000, prob_mut=0.001, lb=[0, 0, 0], ub=[50, 50, 50], precision=1e-7)
+    ga = GA(func=func, n_dim=3, size_pop=50, max_iter=10000, prob_mut=0.001, lb=[0, 0, 0], ub=[50, 50, 50], precision=1e-7)
     best_x, best_y = ga.run()
     print('best_x:', best_x, '\n', 'best_y:', best_y)
     for index in data_route:

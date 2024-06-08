@@ -21,12 +21,12 @@ def random_Q(data_Q):
                 if n < i - m:
                     p = i - m - n
         else:
-            temp = random.randint(1, 4)
+            temp = random.randint(1, 3)
             if temp == 1:
                 m = data_Q[i]
-            elif temp == 2:
+            if temp == 2:
                 n = data_Q[i]
-            else:
+            if temp == 3:
                 p = data_Q[i]
         Q_ls.append([m, n, p])
         m, n, p = 0, 0, 0
