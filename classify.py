@@ -1,30 +1,35 @@
+import random
+import numpy as np
 import pandas as pd
 
 data = pd.read_excel('附件1.xlsx')
 data = data.dropna()
 
 data_num = data['海岛编号']
-data_x = data['x坐标(海里)']
-data_y = data['y坐标(海里)']
-data_need = data['补给需求量（t）']
+data_x = data['x坐标']
+data_y = data['y坐标']
+data_need = data['补给需求量']
 
-data_x_1, data_x_2, data_x_3, data_x_4 = [], [], [], []
-data_y_1, data_y_2, data_y_3, data_y_4 = [], [], [], []
-
-for i in range(1, len(data_num)):
-    if data_x[i] > 0:
-        if data_y[i] > 0:
-            data_x_1.append(data_x[i])
-            data_y_1.append(data_y[i])
+def random_Q(data_Q):
+    Q_ls = []    # 初始化一个需求量分配的列表
+    m, n, p = 0, 0, 0
+    for i in range(len(data_Q)):
+        if i == 6 or i == 7 or i == 9 or i == 10:
+            m = round(random.uniform(0, i), 1)
+            if m < i:
+                n = round(random.uniform(0, i - m), 1)
+                if n < i - m:
+                    p = i - m - n
         else:
-            data_x_4.append(data_x[i])
-            data_y_4.append(data_y[i])
-    else:
-        if data_y[i] > 0:
-            data_x_2.append(data_x[i])
-            data_y_2.append(data_y[i])
-        else:
-            data_x_3.append(data_x[i])
-            data_y_3.append(data_y[i])
+            temp = random.randint(1, 4)
+            if temp == 1:
+                m = data_Q[i]
+            elif temp == 2:
+                n = data_Q[i]
+            else:
+                p = data_Q[i]
+        Q_ls.append([m, n, p])
+        m, n, p = 0, 0, 0
+    return np.array(Q_ls)
 
-df
+print(random_Q(data_need))
