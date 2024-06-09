@@ -24,20 +24,6 @@ def random_Q(data_Q):
         m, n, p, z = 0, 0, 0, 0
     return np.array(Q_ls)
 
-
-# def re_random(Q_ls, data_Q, Q_i):
-#     for i in Q_i:
-#         num = 0
-#         if i > 0:
-#            num += 1
-#         if num <= 4:
-#             Q_ls = random_Q(data_Q)
-#
-#             Q_A = list(np.concatenate(Q_ls[:, 0:1]))
-#             Q_B = list(np.concatenate(Q_ls[:, 1:2]))
-#             Q_C = list(np.concatenate(Q_ls[:, 2:3]))
-#             Q_D = list(np.concatenate(Q_ls[:, 3:4]))
-
 # 计算两点之间的距离
 def distance(x1, y1, x2, y2):
     return np.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
@@ -160,14 +146,6 @@ def func():
     data_route.append([max(t_A, t_B, t_C, t_D), f'A:{route_A}, B:{route_B}, C:{route_C}, D:{route_D}'])
 
     return max(t_A, t_B, t_C, t_D)
-
-# def main():
-#     ga = GA(func=func, n_dim=4, size_pop=100, max_iter=1000, prob_mut=0.1, lb=[40, 40, 40, 70], ub=[50, 50, 50, 80], precision=1e-10)
-#     best_x, best_y = ga.run()
-#     print('best_x:', best_x, '\n', 'best_y:', best_y)
-#     for index in data_route:
-#         if index[0] == best_y:
-#             print(index[1])
 
 def main():
     t = []

@@ -11,12 +11,6 @@ def random_Q(data_Q):
     Q_ls = []    # 初始化一个需求量分配的列表
     m, n, p = 0, 0, 0
     for i in range(len(data_Q)):
-        # if i == 6 or i == 7 or i == 9 or i == 10:
-        #     m = round(random.uniform(0, i), 1)
-        #     if m < i:
-        #         n = round(random.uniform(0, i - m), 1)
-        #         if n < i - m:
-        #             p = i - m - n
         temp = random.randint(1, 3)
         if temp == 1:
             m = data_Q[i]
@@ -43,7 +37,6 @@ def boat_time(w0, Q_ls, data_x, data_y, data_name, empty_speed, speed_loss_per_t
     t_ls = []
     sum_Q = sum(Q_ls)
     route_ls = ['D0']
-
     while sum(Q_ls) > 0:
         t_list = []  # 初始化航程列表
         for i in range(len(Q_ls)):
@@ -100,14 +93,6 @@ def func():
     data_route.append([max(t_A, t_B, t_C), f'A:{route_A}, B:{route_B}, C:{route_C}'])
 
     return max(t_A, t_B, t_C)
-
-# def main():
-#     ga = GA(func=func, n_dim=3, size_pop=100, max_iter=100, prob_mut=0.01, lb=[30, 30, 30], ub=[50, 50, 50], precision=1e-10)
-#     best_x, best_y = ga.run()
-#     print('best_x:', best_x, '\n', 'best_y:', best_y)
-#     for index in data_route:
-#         if index[0] == best_y:
-#             print(index[1])
 
 def main():
     t = []
